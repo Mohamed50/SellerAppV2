@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="368dp"
+        android:layout_height="551dp"
+        android:background="@android:color/white"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteY="8dp"
+        tools:layout_editor_absoluteX="8dp"
+        tools:context="com.example.fifty.sellerappv2.ReceiveActivity">
+
+
+        <TextView
+            android:id="@+id/textView10"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="55dp"
+            android:fontFamily="sans-serif-condensed"
+            android:text="Bill Amount:"
+            android:textColor="@color/color3"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/bill_amount_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/et_cont"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:outlineProvider="bounds"
+            android:padding="10dp" />
+
+        <Button
+            android:id="@+id/send_bill_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="5dp"
+            android:background="@drawable/btn_cont"
+            android:paddingLeft="50dp"
+            android:paddingRight="50dp"
+            android:text="Send Bill"
+            android:textColor="@color/color3" />
+
+</LinearLayout>
