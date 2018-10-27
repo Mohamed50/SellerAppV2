@@ -2,7 +2,9 @@ package com.example.fifty.sellerappv2;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -12,7 +14,9 @@ import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.util.Base64;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -20,6 +24,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,10 +54,17 @@ public class MainActivity extends Activity{
             loginLayout.setVisibility(View.VISIBLE);
         }
     };
+    AlertDialog alert;
+    LayoutInflater inflater;
+    View alertView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        alert = new AlertDialog.Builder(this).create();
+        alertView = View.inflate(getBaseContext(),R.layout.progress_dialog,null);
+        inflater = getLayoutInflater();
+        alert.setView(alertView);
         setStatusBarGradiant(this);
         isNetworkStatusAvailable(getApplicationContext());
 
@@ -97,18 +109,24 @@ public class MainActivity extends Activity{
     }
     Response.Listener loginResponse = new Response.Listener<String>() {
         @Override
-        public void onResponse(String res) {
+        public void onResponse(String response) {
             SharedPreferences sharedPreferences = getSharedPreferences(Configuration.MY_PREFERENCE,MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             try {
-                JSONObject response = new JSONObject(res);
-                editor.putString(Configuration.PREFERENCE_USER_ID,response.getString(Configuration.USERS_ID));
-                editor.putString(Configuration.PREFERENCE_USER_NAME,response.getString(Configuration.USERS_NAME));
-                editor.putString(Configuration.PREFERENCE_USER_PHONE,response.getString(Configuration.USERS_PHONE));
-                editor.commit();
-                Toast.makeText(getBaseContext(), "Login successfully", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getBaseContext(),MenuActivity.class);
-                startActivity(intent);
+                JSONObject jsonObject = new JSONObject(response);
+                if (jsonObject.getString(Configuration.CODE).compareToIgnoreCase("1")==1) {
+                    editor.putString(Configuration.KEY_SELLER_ID, jsonObject.getString(Configuration.KEY_SELLER_ID));
+                    editor.putString(Configuration.COMPANY_BANK_ACCOUNT, jsonObject.getString(Configuration.COMPANY_BANK_ACCOUNT));
+                    editor.putString(Configuration.COMPANY_NAME, jsonObject.getString(Configuration.COMPANY_NAME));
+                    editor.commit();
+                    Toast.makeText(getBaseContext(), "Login successfully", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getBaseContext(), MenuActivity.class);
+                    startActivity(intent);
+                }
+                else{
+                    Toast.makeText(MainActivity.this, "Wrong username or password", Toast.LENGTH_SHORT).show();
+                    dismissProgressBar(response);
+                }
             } catch (JSONException e) {
                 Toast.makeText(getBaseContext(), "Un handel exceptions", Toast.LENGTH_SHORT).show();
                 e.printStackTrace();
@@ -119,11 +137,12 @@ public class MainActivity extends Activity{
         @Override
         public void onErrorResponse(VolleyError error) {
             Toast.makeText(getBaseContext(), "Server Not responding", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(getBaseContext(),MenuActivity.class);
-            startActivity(intent);
+            dismissProgressBar("server not responding");
         }
     };
     public void login(View view){
+        /*Intent intent = new Intent(getBaseContext(),MenuActivity.class);
+        startActivity(intent);*/
         l_username = (EditText) findViewById(R.id.l_username_et);
         l_password = (EditText) findViewById(R.id.l_password_et);
         if (l_username.getText().toString().isEmpty() || l_password.getText().toString().isEmpty()){
@@ -131,7 +150,7 @@ public class MainActivity extends Activity{
             l_username.requestFocus();
         }
         else{
-            /*StringRequest loginRequest = new StringRequest(Request.Method.POST,Configuration.LOGIN_URL,
+            StringRequest loginRequest = new StringRequest(Request.Method.POST,Configuration.LOGIN_URL,
                     loginResponse,loginErrorListener){
                 @Override
                 protected Map<String, String> getParams() throws AuthFailureError {
@@ -141,15 +160,8 @@ public class MainActivity extends Activity{
                     return params;
                 }
             };
-            MySingleton.getInstance(getApplicationContext()).addToRequestQueue(loginRequest);*/
-
-            SharedPreferences sharedPreferences = getSharedPreferences(Configuration.MY_PREFERENCE,MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString(Configuration.PREFERENCE_USER_SERIAL_NO,Build.SERIAL);
-            editor.commit();
-            System.out.println("SSSSSSSSSSSSSSSSSSSSSSs:"+sharedPreferences.getString(Configuration.PREFERENCE_USER_SERIAL_NO,"GGGG"));
-            Intent intent = new Intent(this,MenuActivity.class);
-            startActivity(intent);
+            MySingleton.getInstance(getApplicationContext()).addToRequestQueue(loginRequest);
+            showProgressBar("Logging...");
         }
     }
     public void register(View view){
@@ -165,8 +177,6 @@ public class MainActivity extends Activity{
             Toast.makeText(this, "password and confirm password is not the same", Toast.LENGTH_SHORT).show();
         }
         else {
-            Intent intent = new Intent(getBaseContext(),RegisterActivity.class);
-            startActivity(intent);
             String username = r_username.getText().toString();
             String password = r_password.getText().toString();
             String phone = r_user_phone_no.getText().toString();
@@ -204,9 +214,26 @@ public class MainActivity extends Activity{
     Response.Listener<String> registerResponse = new Response.Listener<String>() {
         @Override
         public void onResponse(String response) {
-                Intent intent = new Intent(getBaseContext(), RegisterActivity.class);
-                startActivity(intent);
-                Toast.makeText(MainActivity.this, response, Toast.LENGTH_LONG).show();
+            try {
+                JSONObject jsonObject = new JSONObject(response);
+                if (jsonObject.getString(Configuration.CODE).compareToIgnoreCase("1")==0){
+                    SharedPreferences sharedPreferences = getSharedPreferences(Configuration.MY_PREFERENCE,MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString(Configuration.KEY_SELLER_ID,jsonObject.getString(Configuration.KEY_SELLER_ID));
+                    editor.apply();
+                    System.out.println("mmmmmmmmmmmmmmmmmmmmmmmmmmm"+jsonObject.getString(Configuration.KEY_SELLER_ID));
+
+                    Intent intent = new Intent(getBaseContext(), RegisterActivity.class);
+                    startActivity(intent);
+                    Toast.makeText(MainActivity.this, jsonObject.getString(Configuration.MESSAGE), Toast.LENGTH_LONG).show();
+                }
+                else{
+                    Toast.makeText(MainActivity.this, jsonObject.getString(Configuration.MESSAGE), Toast.LENGTH_SHORT).show();
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
         }
     };
     Response.ErrorListener registerErrorListener = new Response.ErrorListener() {
@@ -215,5 +242,26 @@ public class MainActivity extends Activity{
 
         }
     };
-
+    public void showProgressBar(String str){
+        ProgressBar progressBar = (ProgressBar) alertView.findViewById(R.id.progressBar2);
+        progressBar.setVisibility(View.VISIBLE);
+        TextView msg = (TextView) alertView.findViewById(R.id.progress_msg);
+        msg.setText(str);
+        alert.show();
+    }
+    public void dismissProgressBar(String str){
+        ProgressBar progressBar = (ProgressBar) alertView.findViewById(R.id.progressBar2);
+        progressBar.setVisibility(View.GONE);
+        TextView msg = (TextView) alertView.findViewById(R.id.progress_msg);
+        msg.setText(str);
+        alert.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialogInterface) {
+                alert.dismiss();
+            }
+        });
+    }
+    public void dismiss(){
+        alert.dismiss();
+    }
 }

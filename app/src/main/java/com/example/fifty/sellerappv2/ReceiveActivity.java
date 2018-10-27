@@ -24,8 +24,8 @@ import com.google.gson.Gson;
 import java.nio.charset.Charset;
 import java.util.Date;
 
-public class ReceiveActivity extends AppCompatActivity /*implements NfcAdapter.CreateNdefMessageCallback ,
-        NfcAdapter.OnNdefPushCompleteCallback*/{
+public class ReceiveActivity extends AppCompatActivity implements NfcAdapter.CreateNdefMessageCallback ,
+        NfcAdapter.OnNdefPushCompleteCallback{
     NfcAdapter nfcAdapter;
     EditText bill_amount ;
     Button sendBillBtn;
@@ -37,13 +37,13 @@ public class ReceiveActivity extends AppCompatActivity /*implements NfcAdapter.C
         setContentView(R.layout.activity_receive);
         bill_amount = (EditText) findViewById(R.id.bill_amount_et);
         sendBillBtn = (Button) findViewById(R.id.send_bill_btn);
-        /*checkNFCSupporting();
+        checkNFCSupporting();
         checkForNFCAdapter();
         nfcAdapter.setOnNdefPushCompleteCallback(this,this);
-        nfcAdapter.setNdefPushMessageCallback(this,this);*/
+        nfcAdapter.setNdefPushMessageCallback(this,this);
     }
 
-/*    @Override
+    @Override
     protected void onResume() {
         super.onResume();
         checkNFCSupporting();
@@ -98,9 +98,10 @@ public class ReceiveActivity extends AppCompatActivity /*implements NfcAdapter.C
         SharedPreferences sharedPreferences = getSharedPreferences(Configuration.MY_PREFERENCE,MODE_PRIVATE);
         PaymentInfo paymentInfo = new PaymentInfo();
         paymentInfo.setBillAmount(bill_amount.getText().toString());
-        paymentInfo.setDate(new Date());
         paymentInfo.setCompanyName(sharedPreferences.getString(Configuration.PREFERENCE_COMPANY_NAME,""));
         paymentInfo.setCompanyType(sharedPreferences.getInt(Configuration.PREFERENCE_COMPANY_TYPE,0));
+        paymentInfo.setCompanyBankAccount(sharedPreferences.getString(Configuration.COMPANY_BANK_ACCOUNT,null));
+        paymentInfo.setCompanyId(sharedPreferences.getString(Configuration.KEY_SELLER_ID,null));
         return paymentInfo;
     }
 
@@ -168,5 +169,5 @@ public class ReceiveActivity extends AppCompatActivity /*implements NfcAdapter.C
         AlertDialog alertDialog = alert.create();
         alertDialog.show();
     }
-*/
+
 }

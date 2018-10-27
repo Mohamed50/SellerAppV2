@@ -40,21 +40,22 @@ public class BackgroundService extends IntentService {
     public int onStartCommand(@Nullable Intent intent, int flags, int startId) {
         sharedPreferences = getApplicationContext().getSharedPreferences(Configuration.MY_PREFERENCE,MODE_PRIVATE);
         //the next line is for Testing need to be deleted later
-        for (int i = 0 ; i < 3 ; i++){
+        /*for (int i = 0 ; i < 3 ; i++){
             PaymentInfo paymentInfo = new PaymentInfo();
             paymentInfo.setBillAmount("500");
-            paymentInfo.setUniqueId(Build.SERIAL);
-            paymentInfo.setCardId("123456789");
-            paymentInfo.setPurchaserId("123456789");
-            paymentInfo.setCompanyId("88");
+            paymentInfo.setUniqueId("xxxxxxxxxxx"+i);
+            paymentInfo.setCardId("77");
+            paymentInfo.setPurchaserId("9");
+            paymentInfo.setCompanyId("1");
             paymentInfo.setPurchaserName("Mohamed Al-Ameen");
-            paymentInfo.setCompanyBankAccount("89798456231");
+            paymentInfo.setCompanyBankAccount("123456");
             paymentInfo.setCompanyType(2);
-            paymentInfo.setDate(new Date());
+            paymentInfo.setStringDate("12/10/2018");
+            paymentInfo.setStringTime("12:10:55");
             paymentInfo.setCompanyName("Area 51");
-            paymentInfo.setFlag(1);
+            paymentInfo.setFlag(0);
             LocalDBA.getInstance(getApplicationContext()).insertPaymentTransaction(paymentInfo);
-        }
+        }*/
         Toast.makeText(getBaseContext(), "Service is Start"+servicesRun, Toast.LENGTH_LONG).show();
         servicesRun = true;
         Toast.makeText(getBaseContext(), "Service is Start"+servicesRun, Toast.LENGTH_LONG).show();
@@ -131,19 +132,7 @@ public class BackgroundService extends IntentService {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String,String> params = new HashMap<>();
-                /*params.put(Configuration.PAYMENT_TRANSACTION_COMPANY_ID,"45646");
-                params.put(Configuration.PAYMENT_TRANSACTION_PURCHASER_ID,"123");
-                params.put(Configuration.PAYMENT_TRANSACTION_COMPANY_BANK_ACCUONT,"87432132");
-                params.put(Configuration.PAYMENT_TRANSACTION_DATE,"14/10/2018");
-                params.put(Configuration.PAYMENT_TRANSACTION_TIME,"12:22:55");
-                params.put(Configuration.PAYMENT_TRANSACTION_PURCHASER_CARD_ID,"54513215");*/
-                System.out.println(Configuration.PAYMENT_TRANSACTION_COMPANY_ID+":"+paymentInfo.getCompanyId());
-                System.out.println(Configuration.PAYMENT_TRANSACTION_PURCHASER_ID+":"+paymentInfo.getPurchaserId());
-                System.out.println(Configuration.PAYMENT_TRANSACTION_COMPANY_BANK_ACCUONT+":"+paymentInfo.getCompanyBankAccount());
-                System.out.println(Configuration.PAYMENT_TRANSACTION_DATE+":"+paymentInfo.getStringDate());
-                System.out.println(Configuration.PAYMENT_TRANSACTION_TIME+":"+paymentInfo.getStringTime());
-                System.out.println(Configuration.PAYMENT_TRANSACTION_PURCHASER_CARD_ID+":"+paymentInfo.getCardId());
-                params.put(Configuration.PAYMENT_TRANSACTION_COMPANY_ID,paymentInfo.getCompanyId());
+                params.put(Configuration.PAYMENT_TRANSACTION_COMPANY_ID,"1");
                 params.put(Configuration.PAYMENT_TRANSACTION_PURCHASER_ID,paymentInfo.getPurchaserId());
                 params.put(Configuration.PAYMENT_TRANSACTION_BILL_AMOUNT,paymentInfo.getBillAmount());
                 params.put(Configuration.PAYMENT_TRANSACTION_COMPANY_BANK_ACCUONT,paymentInfo.getCompanyBankAccount());
@@ -152,6 +141,15 @@ public class BackgroundService extends IntentService {
                 params.put(Configuration.PAYMENT_TRANSACTION_PURCHASER_CARD_ID,paymentInfo.getCardId());
                 params.put(Configuration.PAYMENT_TRANSACTION_UNIQUE_ID,paymentInfo.getUniqueId());
                 params.put(Configuration.PAYMENT_TRANSACTION_ID,paymentInfo.getTransactionId());
+                System.out.println(paymentInfo.getCompanyId());
+                System.out.println(paymentInfo.getPurchaserId());
+                System.out.println(paymentInfo.getBillAmount());
+                System.out.println(paymentInfo.getCompanyBankAccount());
+                System.out.println(paymentInfo.getStringDate());
+                System.out.println(paymentInfo.getStringTime());
+                System.out.println(paymentInfo.getCardId());
+                System.out.println(paymentInfo.getUniqueId());
+                System.out.println(paymentInfo.getTransactionId());
 
                 return params;
             }

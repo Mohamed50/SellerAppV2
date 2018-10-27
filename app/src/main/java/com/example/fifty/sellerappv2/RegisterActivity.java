@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -26,6 +27,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -109,8 +111,7 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
     }
-    public void compeleteRegister(View view){
-        sendDataTheServer();
+    public void compeleteRegister(){
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(RegisterActivity.this);
         alertView = getLayoutInflater().inflate(R.layout.register_completed_dialog,null);
         Button dismissBtn = (Button) alertView.findViewById(R.id.dissmissBtn);
@@ -134,21 +135,23 @@ public class RegisterActivity extends AppCompatActivity {
             window.setBackgroundDrawable(background);
         }
     }
-    public void sendDataTheServer(){
+    public void sendDataTheServer(View view){
         StringRequest registerRequest = new StringRequest(Request.Method.POST,Configuration.ADD_COMPANY_URL,registerResponse,registerErrorListener){
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-
+                SharedPreferences sharedPreferences = getSharedPreferences(Configuration.MY_PREFERENCE,MODE_PRIVATE);
                 Map<String,String> params = new HashMap<>();
                 params.put(Configuration.COMPANY_NAME,companyName.getText().toString());
                 params.put(Configuration.COMPANY_PHONE_NO,companyPhoneNo.getText().toString());
                 params.put(Configuration.COMPANY_BANK_ACCOUNT,companyBankAccount.getText().toString());
                 params.put(Configuration.COMPANY_LICENSE,imageToString(license));
+                params.put(Configuration.KEY_SELLER_ID,sharedPreferences.getString(Configuration.KEY_SELLER_ID,null));
                 return params;
             }
 
         };
         MySingleton.getInstance(getApplicationContext()).addToRequestQueue(registerRequest);
+        registerRequest.setRetryPolicy(new DefaultRetryPolicy(DefaultRetryPolicy.DEFAULT_TIMEOUT_MS*2,5,DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
     }
     Response.Listener<String> registerResponse = new Response.Listener<String>() {
         @Override
@@ -156,7 +159,7 @@ public class RegisterActivity extends AppCompatActivity {
             try {
                 JSONObject jsonObject = new JSONObject(response);
                 if (jsonObject.getString(Configuration.CODE)=="1"){
-                    alertDialog.show();
+                    compeleteRegister();
                 }
                 Toast.makeText(RegisterActivity.this, jsonObject.getString(Configuration.MESSAGE), Toast.LENGTH_LONG).show();
             } catch (JSONException e) {
@@ -167,7 +170,7 @@ public class RegisterActivity extends AppCompatActivity {
     Response.ErrorListener registerErrorListener = new Response.ErrorListener() {
         @Override
         public void onErrorResponse(VolleyError error) {
-
+            Toast.makeText(RegisterActivity.this, "Check Internet Connection", Toast.LENGTH_LONG).show();
         }
     };
 

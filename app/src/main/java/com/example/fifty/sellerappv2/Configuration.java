@@ -6,11 +6,11 @@ package com.example.fifty.sellerappv2;
 
 public class Configuration {
     //Server Urls
-    public static final String LOGIN_URL = "http://c419caf9.ngrok.io/login";
-    public static final String SEND_PAYMENT_INFO_URL = "http://c419caf9.ngrok.io/add/seller/payment";
-    public static final String CHECK_PAYMENT_INFO_URL = "http://c419caf9.ngrok.io/add/seller/payment/check";
-    public static final String REGISTER_URL="http://c419caf9.ngrok.io/add/seller";
-    public static final String ADD_COMPANY_URL="http://c419caf9.ngrok.io/add/company";
+    public static final String LOGIN_URL = "http://b811efd0.ngrok.io/login/seller";
+    public static final String SEND_PAYMENT_INFO_URL = "http://b811efd0.ngrok.io/seller/add/seller/payment";
+    public static final String CHECK_PAYMENT_INFO_URL = "http://b811efd0.ngrok.io/seller/add/seller/payment/check";
+    public static final String REGISTER_URL="http://b811efd0.ngrok.io/register/seller";
+    public static final String ADD_COMPANY_URL="http://b811efd0.ngrok.io/seller/add/company";
 
 
 
@@ -25,8 +25,8 @@ public class Configuration {
 
     //USER Table KEYS
     public static final String USERS_ID = "userID";
-    public static final String USERS_NAME = "userName";
-    public static final String USERS_PHONE = "phoneNumber";
+    public static final String USERS_NAME = "username";
+    public static final String USERS_PHONE = "phoneNO";
     public static final String USERS_PASSWORD = "password";
     public static final String COMPANY_NAME = "companyName";
     public static final String COMPANY_PHONE_NO = "companyPhoneNo";
@@ -65,4 +65,5 @@ public class Configuration {
 
     public static final String CODE ="code" ;
     public static final String MESSAGE ="message" ;
+    public static final String KEY_SELLER_ID = "sellerId";
 }
