@@ -98,10 +98,14 @@ public class ReceiveActivity extends AppCompatActivity implements NfcAdapter.Cre
         SharedPreferences sharedPreferences = getSharedPreferences(Configuration.MY_PREFERENCE,MODE_PRIVATE);
         PaymentInfo paymentInfo = new PaymentInfo();
         paymentInfo.setBillAmount(bill_amount.getText().toString());
-        paymentInfo.setCompanyName(sharedPreferences.getString(Configuration.PREFERENCE_COMPANY_NAME,""));
-        paymentInfo.setCompanyType(sharedPreferences.getInt(Configuration.PREFERENCE_COMPANY_TYPE,0));
-        paymentInfo.setCompanyBankAccount(sharedPreferences.getString(Configuration.COMPANY_BANK_ACCOUNT,null));
-        paymentInfo.setCompanyId(sharedPreferences.getString(Configuration.KEY_SELLER_ID,null));
+        paymentInfo.setCompanyType(0);
+        paymentInfo.setCompanyBankAccount("123456");
+        paymentInfo.setCompanyId("5");
+        paymentInfo.setCompanyName(sharedPreferences.getString(Configuration.COMPANY_NAME,null));
+        paymentInfo.setCompanyType(sharedPreferences.getInt(Configuration.COMPANY_TYPE,5));
+        paymentInfo.setCompanyBankAccount(sharedPreferences.getString(Configuration.COMPANY_BANK_ACCOUNT,"kfhjhkj"));
+        paymentInfo.setCompanyId(sharedPreferences.getString(Configuration.KEY_SELLER_ID,"hjkfhjkhs"));
+        paymentInfo.setDate(new Date());
         return paymentInfo;
     }
 

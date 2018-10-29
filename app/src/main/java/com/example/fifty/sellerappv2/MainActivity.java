@@ -114,11 +114,12 @@ public class MainActivity extends Activity{
             SharedPreferences.Editor editor = sharedPreferences.edit();
             try {
                 JSONObject jsonObject = new JSONObject(response);
-                if (jsonObject.getString(Configuration.CODE).compareToIgnoreCase("1")==1) {
+                if (jsonObject.getString(Configuration.CODE).compareToIgnoreCase("1")==0) {
                     editor.putString(Configuration.KEY_SELLER_ID, jsonObject.getString(Configuration.KEY_SELLER_ID));
                     editor.putString(Configuration.COMPANY_BANK_ACCOUNT, jsonObject.getString(Configuration.COMPANY_BANK_ACCOUNT));
                     editor.putString(Configuration.COMPANY_NAME, jsonObject.getString(Configuration.COMPANY_NAME));
-                    editor.commit();
+                    editor.putInt(Configuration.COMPANY_TYPE, Integer.valueOf(jsonObject.getString(Configuration.COMPANY_TYPE)));
+                    editor.apply();
                     Toast.makeText(getBaseContext(), "Login successfully", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(getBaseContext(), MenuActivity.class);
                     startActivity(intent);
@@ -126,6 +127,8 @@ public class MainActivity extends Activity{
                 else{
                     Toast.makeText(MainActivity.this, "Wrong username or password", Toast.LENGTH_SHORT).show();
                     dismissProgressBar(response);
+                    /*Intent intent = new Intent(getBaseContext(), MenuActivity.class);
+                    startActivity(intent);*/
                 }
             } catch (JSONException e) {
                 Toast.makeText(getBaseContext(), "Un handel exceptions", Toast.LENGTH_SHORT).show();

@@ -6,11 +6,11 @@ package com.example.fifty.sellerappv2;
 
 public class Configuration {
     //Server Urls
-    public static final String LOGIN_URL = "http://b811efd0.ngrok.io/login/seller";
-    public static final String SEND_PAYMENT_INFO_URL = "http://b811efd0.ngrok.io/seller/add/seller/payment";
-    public static final String CHECK_PAYMENT_INFO_URL = "http://b811efd0.ngrok.io/seller/add/seller/payment/check";
-    public static final String REGISTER_URL="http://b811efd0.ngrok.io/register/seller";
-    public static final String ADD_COMPANY_URL="http://b811efd0.ngrok.io/seller/add/company";
+    public static final String LOGIN_URL = "http://00e7bee6.ngrok.io/login/seller";
+    public static final String SEND_PAYMENT_INFO_URL = "http://00e7bee6.ngrok.io/seller/add/seller/payment";
+    public static final String CHECK_PAYMENT_INFO_URL = "http://00e7bee6.ngrok.io/seller/add/seller/payment/check";
+    public static final String REGISTER_URL="http://00e7bee6.ngrok.io/register/seller";
+    public static final String ADD_COMPANY_URL="http://00e7bee6.ngrok.io/seller/add/company";
 
 
 
@@ -29,6 +29,7 @@ public class Configuration {
     public static final String USERS_PHONE = "phoneNO";
     public static final String USERS_PASSWORD = "password";
     public static final String COMPANY_NAME = "companyName";
+    public static final String COMPANY_TYPE = "companyType";
     public static final String COMPANY_PHONE_NO = "companyPhoneNo";
     public static final String COMPANY_BANK_ACCOUNT = "companyBankAccount";
     public static final String COMPANY_LICENSE = "companyLicense";
