@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -30,6 +31,7 @@ public class ReceiveActivity extends AppCompatActivity implements NfcAdapter.Cre
     EditText bill_amount ;
     Button sendBillBtn;
     String extrnalType = "nfclab.com:SmartPay";
+    PaymentInfo paymentInfo;
     boolean check=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,8 +105,8 @@ public class ReceiveActivity extends AppCompatActivity implements NfcAdapter.Cre
         paymentInfo.setCompanyId("5");
         paymentInfo.setCompanyName(sharedPreferences.getString(Configuration.COMPANY_NAME,null));
         paymentInfo.setCompanyType(sharedPreferences.getInt(Configuration.COMPANY_TYPE,5));
-        paymentInfo.setCompanyBankAccount(sharedPreferences.getString(Configuration.COMPANY_BANK_ACCOUNT,"kfhjhkj"));
-        paymentInfo.setCompanyId(sharedPreferences.getString(Configuration.KEY_SELLER_ID,"hjkfhjkhs"));
+        paymentInfo.setCompanyBankAccount(sharedPreferences.getString(Configuration.COMPANY_BANK_ACCOUNT,null));
+        paymentInfo.setCompanyId(sharedPreferences.getString(Configuration.KEY_SELLER_ID,null));
         paymentInfo.setDate(new Date());
         return paymentInfo;
     }
@@ -123,7 +125,7 @@ public class ReceiveActivity extends AppCompatActivity implements NfcAdapter.Cre
 
     @Override
     public NdefMessage createNdefMessage(NfcEvent event) {
-        PaymentInfo paymentInfo = getPaymentInfo();
+        paymentInfo = getPaymentInfo();
         Gson g = new Gson();
         String msg = g.toJson(paymentInfo);
         NdefRecord ndefRecord = createNDEFRecord(msg);
@@ -162,14 +164,23 @@ public class ReceiveActivity extends AppCompatActivity implements NfcAdapter.Cre
 
     private void insertPaymentInfoToDBA(String json){
         Gson g = new Gson();
-        PaymentInfo paymentInfo = g.fromJson(json,PaymentInfo.class);
+        paymentInfo = g.fromJson(json,PaymentInfo.class);
         LocalDBA.getInstance(getApplicationContext()).insertPaymentTransaction(paymentInfo);
         paymentDialog();
     }
     private void paymentDialog(){
-        View alertView = getLayoutInflater().inflate(R.layout.payment_transaction_success_dialog,null);
+        View alertView = getLayoutInflater().inflate(R.layout.payment_successfully_done_dialog,null);
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
         alert.setView(alertView);
+        TextView purchasername = (TextView) alertView.findViewById(R.id.purchaser_name);
+        TextView time = (TextView) alertView.findViewById(R.id.time);
+        TextView date = (TextView) alertView.findViewById(R.id.date);
+        TextView billAmount = (TextView) alertView.findViewById(R.id.bill_amount);
+        purchasername.setText(paymentInfo.getPurchaserName());
+        time.setText(paymentInfo.getStringTime());
+        date.setText(paymentInfo.getStringDate());
+        billAmount.setText(paymentInfo.getBillAmount());
+
         AlertDialog alertDialog = alert.create();
         alertDialog.show();
     }

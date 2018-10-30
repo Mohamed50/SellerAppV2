@@ -11,6 +11,7 @@ import android.support.annotation.Nullable;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -132,7 +133,7 @@ public class BackgroundService extends IntentService {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String,String> params = new HashMap<>();
-                params.put(Configuration.PAYMENT_TRANSACTION_COMPANY_ID,"1");
+                params.put(Configuration.PAYMENT_TRANSACTION_COMPANY_ID,paymentInfo.getCompanyId());
                 params.put(Configuration.PAYMENT_TRANSACTION_PURCHASER_ID,paymentInfo.getPurchaserId());
                 params.put(Configuration.PAYMENT_TRANSACTION_BILL_AMOUNT,paymentInfo.getBillAmount());
                 params.put(Configuration.PAYMENT_TRANSACTION_COMPANY_BANK_ACCUONT,paymentInfo.getCompanyBankAccount());
@@ -154,6 +155,11 @@ public class BackgroundService extends IntentService {
                 return params;
             }
         };
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                DefaultRetryPolicy.DEFAULT_TIMEOUT_MS*2,
+                1,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
+        );
         MySingleton.getInstance(getApplicationContext()).addToRequestQueue(stringRequest);
     }
     Response.ErrorListener errorListener = new Response.ErrorListener() {
@@ -202,6 +208,11 @@ public class BackgroundService extends IntentService {
                 return params;
             }
         };
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                DefaultRetryPolicy.DEFAULT_TIMEOUT_MS*2,
+                1,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
+        );
         MySingleton.getInstance(getApplicationContext()).addToRequestQueue(stringRequest);
     }
     Response.ErrorListener checkErrorListener = new Response.ErrorListener() {

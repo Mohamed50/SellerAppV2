@@ -106,7 +106,7 @@ public class MenuActivity extends AppCompatActivity
             SharedPreferences sharedPreferences = getSharedPreferences(Configuration.MY_PREFERENCE,MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.clear();
-            editor.commit();
+            editor.apply();
             Intent intent = new Intent(this,MainActivity.class);
             startActivity(intent);
         }

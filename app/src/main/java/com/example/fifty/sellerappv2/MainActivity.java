@@ -93,7 +93,11 @@ public class MainActivity extends Activity{
             }
         });
         handler.postDelayed(runnable,3000);
-
+        SharedPreferences sharedPreferences = getSharedPreferences(Configuration.MY_PREFERENCE,MODE_PRIVATE);
+        if(sharedPreferences != null && sharedPreferences.getString(Configuration.KEY_SELLER_ID,null) != null){
+            Intent intent = new Intent(getBaseContext(),MenuActivity.class);
+            startActivity(intent);
+        }
 
 
     }
