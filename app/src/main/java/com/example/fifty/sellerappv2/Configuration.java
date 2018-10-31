@@ -6,11 +6,11 @@ package com.example.fifty.sellerappv2;
 
 public class Configuration {
     //Server Urls
-    public static final String LOGIN_URL = "http://d0cebb32.ngrok.io/login/seller";
-    public static final String SEND_PAYMENT_INFO_URL = "http://d0cebb32.ngrok.io/seller/add/seller/payment";
-    public static final String CHECK_PAYMENT_INFO_URL = "http://d0cebb32.ngrok.io/seller/add/seller/payment/check";
-    public static final String REGISTER_URL="http://d0cebb32.ngrok.io/register/seller";
-    public static final String ADD_COMPANY_URL="http://d0cebb32.ngrok.io/seller/add/company";
+    public static final String LOGIN_URL = "http://5c1d4c79.ngrok.io/login/seller";
+    public static final String SEND_PAYMENT_INFO_URL = "http://5c1d4c79.ngrok.io/seller/add/seller/payment";
+    public static final String CHECK_PAYMENT_INFO_URL = "http://5c1d4c79.ngrok.io/seller/add/seller/payment/check";
+    public static final String REGISTER_URL="http://5c1d4c79.ngrok.io/register/seller";
+    public static final String ADD_COMPANY_URL="http://5c1d4c79.ngrok.io/seller/add/company";
 
 
 
